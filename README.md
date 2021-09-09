@@ -1,7 +1,7 @@
 Benchmarks (Publically available co-crystal screening data):
 
 | Dataset reference      | Number of data| 
-| ------------- |:-------------:| -----:|
+| ------------- |:-------------:| 
 | CrystEngComm, 2017, 19, 5336–5340 | 680 (408 negatives + 272 positives) | 
 | Cryst. Growth Des., 2014, 14, 165–171 | 432 (300 negatives + 132 positives)    | 
 | CrystEngComm, 2014, 16, 5839–5848 | 38 (36 negatives + 2 positives)   |   
