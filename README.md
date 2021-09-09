@@ -1,8 +1,8 @@
-Benchmark datasets
+Benchmarks:
 
 | Dataset       | Number of data| Reference  |
 | ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
+| Richard Cooper dataset      | 680 (408 negatives + 272 positives) | 1|
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
 
