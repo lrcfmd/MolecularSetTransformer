@@ -1,10 +1,10 @@
-Benchmarks:
+Benchmarks (Publically available co-crystal screening data):
 
-| Dataset       | Number of data| Reference  |
+| Dataset reference      | Number of data| 
 | ------------- |:-------------:| -----:|
-| Richard Cooper dataset      | 680 (408 negatives + 272 positives) | 1|
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+| CrystEngComm, 2017, 19, 5336–5340 | 680 (408 negatives + 272 positives) | 
+| Cryst. Growth Des., 2014, 14, 165–171 | 432 (300 negatives + 132 positives)    | 
+| CrystEngComm, 2014, 16, 5839–5848 | 38 (36 negatives + 2 positives)   |   
 
 There must be at least 3 dashes separating each header cell.
 The outer pipes (|) are optional, and you don't need to make the 
