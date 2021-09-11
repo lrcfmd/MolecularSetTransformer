@@ -1,9 +1,16 @@
 Benchmarks (Publically available co-crystal screening data):
 
-| Dataset reference      | Number of data| Other methods tested on these data
-| ------------- |:-------------:| :-------------:| 
-| Wicker et al (2017) | 680 (408 negatives + 272 positives) |   |
-| Grecu et al (2014) | 432 (300 negatives + 132 positives)    |  COSMO-RS, Wang et al |
-| Wood et al (2014) | 38 (36 negatives + 2 positives)   |   |
+|               |     Dataset reference                                                         |     Number or data                           |     Other methods tested on these   datasets    |
+|---------------|-------------------------------------------------------------------------------|----------------------------------------------|-------------------------------------------------|
+|     1         |     Wicker et al, CrystEngComm,   2017, 19, 5336–5340                         |     680 (408   negatives + 272 positives)    |                                                 |
+|     2         |     Grecu   et al, Cryst.   Growth Des., 2014, 14, 165–171                    |     432 (300   negatives + 132 positives)    |     MEPS, COSMO-RS                              |
+|     3         |     Wood et al, CrystEngComm,   2014, 16, 5839–5848                           |     38 (36   negatives + 2 positives)        |                                                 |
+|     4         |     Vriza et al, Chem. Sci., 2021, 12, 1702–1719                              |     6 (4 negatives + 2 positives)            |                                                 |
+|     5         |     Mapp et al, Cryst.   Growth Des., 2017, 17, 163–174     Khalaji et al     |     108 (90 negatives + 18 positives)        |     MC                                          |
+|     6         |     Przybyłek   et al, Cryst.   Growth Des., 2019, 19, 3876–3887              |     712 (104 negatives + 608 positives)      |                                                 |
+|     7         |     Przybyłek   and P. Cysewski, Cryst.   Growth Des., 2018, 18, 3524–3534    |     226 (58 negatives + 168 positives)       |                                                 |
+|     8         |     Aakeröy   et al, Cryst.   Growth Des., 2009, 9, 432–441                   |     82 (17 negatives + 65 positives)         |                                                 |
+|     9         |     Devogelaer   et al, Cryst.   Growth Des., 2021, 21, 3428–3437             |     30 (18 negatives + 12 positives)         |                                                 |
+|     10        |     Wu et al, Cryst.   Growth Des., 2021, 21, 4531–4546                       |     63 (22 negatives + 41 positives)         |     COSMO-RS, MC                                |
 
 
