@@ -1,9 +1,9 @@
-# Extract co-crystals from CCDC
+## Extract co-crystals from CCDC
 You need the CSD licence to use this script. You can extract multicomponent crystals after screening the whole > 1 million CSD database:
 
     python extract_cocrystals -s
 
-# Using pretrained models to rank any test data
+## Using pretrained models to rank any test data
 
 Molecular descriptors model:
 
@@ -22,7 +22,7 @@ BERT model:
     python src/bert_fingerprint.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
 
 
-# Benchmarks (Publically available co-crystal screening data):
+## Benchmarks (Publically available co-crystal screening data):
 
 |               |     Dataset reference                                                         |     Number or data                           |     Other methods tested on these   datasets    |
 |---------------|-------------------------------------------------------------------------------|----------------------------------------------|-------------------------------------------------|
