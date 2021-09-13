@@ -20,6 +20,25 @@ GNN model:
 BERT model:
 
     python src/bert_fingerprint.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
+    
+ 
+## Or train your own models based on the prefered molecular representation
+
+Molecular descriptors model:
+
+    python train_mordred_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
+
+Fingerprint model:
+
+    python train_moorgan_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
+
+GNN model:
+
+    python train_gnn_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
+    
+BERT model:
+
+    python train_bert_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
 
 
 ## Benchmarks (Publically available co-crystal screening data):
@@ -37,4 +56,6 @@ BERT model:
 |     9         |     Devogelaer   et al, Cryst.   Growth Des., 2021, 21, 3428–3437             |     30 (18 negatives + 12 positives)         |                                                 |
 |     10        |     Wu et al, Cryst.   Growth Des., 2021, 21, 4531–4546                       |     63 (22 negatives + 41 positives)         |     COSMO-RS, MC                                |
 
+## You can  now visualize the data with streamlite and get quick predictions by using your SMILES pairs 
 
+    streamlite app.py
