@@ -5,19 +5,19 @@ You need the CSD licence to use this script. You can extract multicomponent crys
 
 ## Using pretrained models to rank any test data
 
-Molecular descriptors model:
+    #Molecular descriptors model:
 
     python mordred_descriptors.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.81
 
-Fingerprint model:
+    #Fingerprint model:
 
     python src/fingerprint_representation.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
 
-GNN model:
+    #GNN model:
 
     python src/gnn_fingerprint.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
     
-BERT model:
+    # BERT model:
 
     python src/bert_fingerprint.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
     
