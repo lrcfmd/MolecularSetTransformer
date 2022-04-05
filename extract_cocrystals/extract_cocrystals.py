@@ -90,7 +90,7 @@ def search_cocrystals(filter_solvents=True):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('-s', '--solvent', default=True, action='store_true', help='Remove solvents or not')
+    parser.add_argument('-s', '--no_solvent', default=True, action='store_true', help='Remove solvents or not')
     args = parser.parse_args()
     cocrystals = search_cocrystals(args.solvent)
 

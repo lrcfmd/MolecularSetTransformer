@@ -1,12 +1,13 @@
-## Datasets
-The data folder contains the following datasets:
-    csd_cocrystals2020: all the co-crystals is csd extracted from the 2020 version indicating the molecular pairs interactions category and the year the structure deposited in csd
-    all_validation_sets: all the in-silico co-crystal screening datasets gathered from literature
+## Molecular Set Transformer
+A deep learning model, namely Molecular Set Transformer, was designed for enabling high-throughput co-crystal screening for any type of molecular pairs. The model is able to provide score and uncertainty for any given molecular pair based on its probability to form a multicomponent cystal.
 
-## Extract co-crystals from CCDC
-You need the CSD licence to use this script. You can extract multicomponent crystals after screening the whole > 1 million CSD database:
+## Extract co-crystals from the Cambridge Structural Database (CSD)
+You need the CSD licence (https://www.ccdc.cam.ac.uk/) to use this script. You can extract multicomponent crystals after screening the whole > 1 million CSD database. If you do not want to include the solvents, you can use the option  --no_solvents
 
-    python extract_cocrystals -s
+    python extract_cocrystals/extract_cocrystals.py --no_solvents
+
+## Benchmarks (Publically available co-crystal screening data)
+All the is-silico co-crystal screening datasets gathered from literature can be found on the validation_data folder and are described below:
 
 ## Using pretrained models to rank any test data
 
