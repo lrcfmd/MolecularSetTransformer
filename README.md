@@ -63,6 +63,6 @@ BERT model:
     python train_bert_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
 
 
-## You can  now visualize the data with streamlite and get quick predictions by using your SMILES pairs 
+## You can use Streamlit to get quick predictions for any given SMILES pair 
 
     just click on the link: https://share.streamlit.io/katerinavr/streamlit/app.py
