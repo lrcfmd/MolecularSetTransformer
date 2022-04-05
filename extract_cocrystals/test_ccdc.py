@@ -18,7 +18,7 @@ from ccdc import io
 
 from ccdc.io import MoleculeReader
 csd_mol_reader = MoleculeReader('CSD')
-mol = csd_mol_reader.molecule('OKEYIP')
+mol = csd_mol_reader.molecule('CSATBR')
 print(mol.smiles)
 
 
@@ -28,15 +28,20 @@ print(mol.smiles)
 #dataset_cocrystals = dataset_cocrystals[~dataset_cocrystals.name.str.contains("clathrate")] 
 #dataset_cocrystals.to_csv('datasets/train_data/all_cocrystals.csv',index=False)
 
-dataset_cocrystals = pd.read_csv('datasets/train_data/cocrystals2020_clean_functionality.csv')
+#dataset_cocrystals = pd.read_csv('datasets/train_data/cocrystals2020_clean_functionality.csv')
 
-dataset_cocrystals.csd_id
-crystal_reader = io.CrystalReader('CSD') 
+#dataset_cocrystals.csd_id
+#crystal_reader = io.CrystalReader('CSD') 
 #[crystal_reader.crystal(i) for i in dataset_cocrystals.csd_id.values]
-for i in dataset_cocrystals.csd_id.values:
-    crystal=crystal_reader.crystal(i)
-    with io.CrystalWriter(os.path.join('datasets/cocrystals2020_cif_files', '%s.cif'%i), append=True) as crystal_writer:
-        crystal_writer.write(crystal)
+#for i in crystal_reader :#dataset_cocrystals.csd_id.values:
+    #print(i)
+    #crystal=crystal_reader.crystal(i)
+    #print(crystal)
+ #   with io.CrystalWriter("test/%s.cif"%i.identifier) as writer: 
+  #          writer.write(i)
+
+    #with io.CrystalWriter(os.path.join('test', '%s.cif'%i.identifier), append=True) as crystal_writer:
+     #  crystal_writer.write(i)
 
 #csd_reader = io.EntryReader('CSD')
 #csd_reader.entry('ABEBUF').publication

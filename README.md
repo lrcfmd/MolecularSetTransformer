@@ -1,3 +1,8 @@
+## Datasets
+The data folder contains the following datasets:
+    csd_cocrystals2020: all the co-crystals is csd extracted from the 2020 version indicating the molecular pairs interactions category and the year the structure deposited in csd
+    all_validation_sets: all the in-silico co-crystal screening datasets gathered from literature
+
 ## Extract co-crystals from CCDC
 You need the CSD licence to use this script. You can extract multicomponent crystals after screening the whole > 1 million CSD database:
 
