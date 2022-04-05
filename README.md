@@ -8,9 +8,12 @@ You need the CSD licence (https://www.ccdc.cam.ac.uk/) to use this script. You c
     python extract_cocrystals/extract_cocrystals.py --no_solvents
 
 Our extracted csd co-crystals dataset using CSD 2020 can be found in `csd_data/csd_cocrystals2020.csv`
+The training co-crystals dataset was created after removing the duplicate pairs, i.e., pairs found both in the csd_cocrystals2020 and in the benchmark data and is referred as `csd_data/csd_training_set.csv`
+
+    python extract_cocrystals/drop_duplicates.py
 
 ## Benchmarks (Publically available co-crystal screening data)
-All the is-silico co-crystal screening datasets gathered from literature can be found on the validation_data folder and are described below:
+All the is-silico co-crystal screening datasets gathered from literature can be found on the validation_data folder and are described below in chronological order:
 
 |               |     Dataset reference                                                         |     Number or data                           |     Other methods tested on these   datasets    |
 |---------------|-------------------------------------------------------------------------------|----------------------------------------------|-------------------------------------------------|
@@ -28,42 +31,38 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
 
 ## Using pretrained models to rank any test data
 
-    #Molecular descriptors model:
+    python -representation<> -dataset_name<> -save_dir<> -get_plots<> -threshold<>
 
-    python mordred_descriptors.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.81
+- `representation` The molecular embeddings to use. Choose among:
+    - gnn
+    - morgan
+    - chemberta
+    - mordred
 
-    #Fingerprint model:
+- `dataset_name` The location of the .csv file including the molecular pairs 
 
-    python src/fingerprint_representation.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
-
-    #GNN model:
-
-    python src/gnn_fingerprint.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
+- `save_dir` The folder to save the generated files
     
-    # BERT model:
+- `threshold` Only needed if plotting the results and have some known labels
 
-    python src/bert_fingerprint.py -dataset_name data/grecu_example.csv -save_dir grecu_data -threshold 0.84
-    
- 
+
 ## Or train your own models based on the prefered molecular representation
 
-Molecular descriptors model:
+    python -representation<> -training_data<> -save_dir<> -n_epochs -lr
 
-    python train_mordred_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
+- `representation` The molecular embeddings to use. Choose among:
+    - gnn
+    - morgan
+    - chemberta
+    - mordred
 
-Fingerprint model:
+- `training_data` The location of the .csv file containing the molecular pairs for training
 
-    python train_moorgan_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
-
-GNN model:
-
-    python train_gnn_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
+- `n_epochs` The number of epochs to use for training
     
-BERT model:
-
-    python train_bert_descriptors.py -dataset_name [dataset_name] -model_save_dir [directory to save your model]
+- `lr` Learning rate
 
 
 ## You can use Streamlit to get quick predictions for any given SMILES pair 
 
-    just click on the link: https://share.streamlit.io/katerinavr/streamlit/app.py
+just click on the link: [https://share.streamlit.io/katerinavr/streamlit/app.py](https://share.streamlit.io/katerinavr/streamlit/app.py)
