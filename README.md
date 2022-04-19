@@ -31,7 +31,7 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
 
 ## Using pretrained models to rank any test data
 
-    python main.py --model <model> --dataset_name <dataset_name> --save_dir <save_dir> --get_plots --threshold <threshold>
+    python eval.py --model <model> --dataset_name <dataset_name> --save_dir <save_dir> --get_plots --threshold <threshold>
 
 - `model` The molecular embeddings to use. Choose among:
     - gnn
@@ -44,7 +44,7 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
 
 Example
 
-    python main.py --model gnn --dataset_name meps --save_dir results_folder --get_plots --threshold 0.85
+    python eval.py --model gnn --dataset_name meps --save_dir results_folder --get_plots --threshold 0.85
 
 ## Or train your own models based on the prefered molecular representation
 

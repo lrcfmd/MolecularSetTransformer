@@ -4,6 +4,7 @@ data/coformer1
 data/coformer2
 data/*
 extract_cocrystals/*
+deep_one_class/*
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode
