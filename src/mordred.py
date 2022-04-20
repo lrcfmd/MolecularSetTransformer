@@ -14,25 +14,33 @@ from src.base.torchvision_dataset import TorchvisionDataset
 from src.utils.config import Config
 from src.base.base_net import BaseNet
 import subprocess
+from rdkit import Chem
+from rdkit.Chem import AllChem
+import argparse
+import glob
+from mordred import Calculator, descriptors  #https://github.com/mordred-descriptor/mordred
+calc = Calculator(descriptors, ignore_3D=True)
 
-def get_representation(smiles1, smiles2):
-    """ Given the smiles of a validation dataset convert it to fingerprint
-     representation """   
-    df = pd.concat([pd.DataFrame(smiles1, columns=['smiles1']),
-     pd.DataFrame(smiles2, columns=['smiles2'])], axis=1)
+
+def smile_to_modred(smile):
+    return calc(Chem.MolFromSmiles(smile))
+
+def get_modred(smiles):
+    paws = []
+    for smile in smiles:
+        paws.append(np.asarray(smile_to_modred(smile)))
+    return paws
+
+def get_modred_df(smiles):
+    df = pd.DataFrame(get_modred(smiles))
+    df = pd.DataFrame(df.values, columns=[str(d) for d in calc.descriptors])
     return df
 
-def smiles2txt(dataset):  
-    ''' reading the smiles from the csv file and saves them in txt file in order to get the 
-    graph embendings from each smile'''
-
-    with open(os.path.join("src\\gnn",'smiles1.txt'), 'w') as f:
-        for item in dataset['smiles1'].values:
-            f.write("%s\n" % item)
-
-    with open(os.path.join("src\\gnn", 'smiles2.txt'), 'w') as f:
-        for item in dataset['smiles2'].values:
-            f.write("%s\n" % item)
+def get_mordred_representation(dataset):
+    """ Given the smiles of a validation dataset get the mordred descriptors """   
+    df = pd.concat([dataset['Name1'], dataset['Name2'], get_modred_df(dataset['Smiles1'].values),
+     get_modred_df(dataset['Smiles2'].values)], axis=1)
+    return df
 
 class Pairs_Dataset(TorchvisionDataset):
 
@@ -66,48 +74,41 @@ class Pairs(Dataset):
         return self.decoder(self.encoder(x))
 
 
-class PairsEncoder(nn.Module):
+class PairsEncoder(BaseNet):
 
-    def __init__(self,proba=0.1):
+    def __init__(self):
         super().__init__()
         self.rep_dim = 50
-        self.seq = nn.Sequential(SAB(dim_in=300, dim_out=150, num_heads=5),
-                                 nn.Dropout(p=proba),
-            SAB(dim_in=150, dim_out=50, num_heads=5),
-        PMA(dim=50, num_heads=2, num_seeds=1))
-
+        self.seq = nn.Sequential(SAB(dim_in=1613, dim_out=500, num_heads=10),
+              SAB(dim_in=500, dim_out=100, num_heads=10),
+              SAB(dim_in=100, dim_out=50, num_heads=10),
+              PMA(dim=50, num_heads=10, num_seeds=1),
+            PMA(dim=50, num_heads=5, num_seeds=1))
+        
     def forward(self, inp):
-      x = torch.split(inp, 300, dim=1)     
+      x = torch.split(inp, 1613, dim=1)     
       x= torch.stack(x).transpose(0,1)
       x = self.seq(x).squeeze()
       return x.view(inp.size(0), -1)
 
+class PairsAutoEncoder(BaseNet):
 
-class PairsAutoEncoder(nn.Module):
-    def __init__(self, proba=0.1):
+    def __init__(self):
         super().__init__()
-        self.encoder = PairsEncoder(proba)
+        self.encoder = PairsEncoder()
         self.encoder.apply(init_weights)
-        self.decoder = nn.Sequential( nn.Linear(in_features=50, out_features=300), nn.LeakyReLU(),
-                                     #nn.Dropout(p=proba),
-        nn.Linear(in_features=300, out_features=600))
+        self.decoder = nn.Sequential( nn.Linear(in_features=50, out_features=1613), nn.LeakyReLU(),
+        nn.Sequential(nn.Linear(in_features=1613, out_features=3226), nn.Sigmoid()))
         self.decoder.apply(init_weights)
     def forward(self, x):
-        return self.decoder(self.encoder(x)).squeeze()
-
+        return self.decoder(self.encoder(x))
 
 def load_dataset(filename):
     dataset=pd.read_csv(filename)
     dataset = dataset.iloc[:10,:]
     smiles1 =  dataset['smiles1']
     smiles2 =  dataset['smiles2']
-    validation_set= get_representation(smiles1, smiles2)    
-    smiles2txt(validation_set)
-    python = sys.executable
-    subprocess.call(f"{python} src/gnn/main.py -fi src/gnn/smiles1.txt -m gin_supervised_masking -o src/gnn/results1", shell=True)
-    subprocess.call(f"{python} src/gnn/main.py -fi src/gnn/smiles2.txt -m gin_supervised_masking -o src/gnn/results2", shell=True)
-    valid1 = np.load('src/gnn/results1/mol_emb.npy')
-    valid2 = np.load('src/gnn/results2/mol_emb.npy')
-    df_gnn = pd.concat([pd.DataFrame(valid1), pd.DataFrame(valid2)],axis=1)   
-    dataset = Pairs_Dataset('', data= df_gnn.iloc[:, :] )
+    df_mordred = pd.concat([pd.DataFrame(get_modred_df(dataset.smiles1).apply(lambda x: pd.to_numeric(x, errors='coerce').fillna(0)), columns=[str(d) for d in calc.descriptors]),
+     pd.DataFrame(get_modred_df(dataset.smiles2).apply(lambda x: pd.to_numeric(x, errors='coerce').fillna(0)), columns=[str(d) for d in calc.descriptors])],axis=1)
+    dataset = Pairs_Dataset('', data= df_mordred.iloc[:, :] )
     return dataset

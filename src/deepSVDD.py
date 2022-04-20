@@ -2,12 +2,12 @@ import json
 import torch
 import torch.nn as nn
 
-from deep_one_class.src.base.base_dataset import BaseADDataset
-#from deep_one_class.src.networks.main import build_network, build_autoencoder
-from deep_one_class.src.optim.deepSVDD_trainer import DeepSVDDTrainer
-from deep_one_class.src.optim.ae_trainer import AETrainer
-from deep_one_class.src.base.base_net import BaseNet
-from deep_one_class.src.set_transformer.modules import SAB, PMA, ISAB
+from src.base.base_dataset import BaseADDataset
+#from src.networks.main import build_network, build_autoencoder
+from src.optim.deepSVDD_trainer import DeepSVDDTrainer
+from src.optim.ae_trainer import AETrainer
+from src.base.base_net import BaseNet
+from src.set_transformer.modules import SAB, PMA, ISAB
 
 class DeepSVDD(object):
     """A class for the Deep SVDD method.
@@ -177,5 +177,5 @@ def build_network(net_name):
 
 def init_weights(m):
     if type(m) == nn.Linear:
-        torch.nn.init.xavier_uniform(m.weight)
+        torch.nn.init.xavier_uniform_(m.weight)
         m.bias.data.fill_(0.01)

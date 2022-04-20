@@ -13,14 +13,19 @@ from src.utils.config import Config
 from src.base.torchvision_dataset import TorchvisionDataset
 from src.utils.config import Config
 from src.base.base_net import BaseNet
-import subprocess
+from simpletransformers.language_representation import RepresentationModel
+from simpletransformers.config.model_args import ModelArgs
 
-def get_representation(smiles1, smiles2):
-    """ Given the smiles of a validation dataset convert it to fingerprint
-     representation """   
-    df = pd.concat([pd.DataFrame(smiles1, columns=['smiles1']),
-     pd.DataFrame(smiles2, columns=['smiles2'])], axis=1)
-    return df
+model_args = ModelArgs(max_seq_length=156)
+model = RepresentationModel(
+        model_type="roberta",
+        model_name="seyonec/PubChem10M_SMILES_BPE_396_250",
+        use_cuda=False)
+
+def mean_pool(model, sentences):
+  attn_mask = model._tokenize(sentences)['attention_mask'].numpy()
+  word_vectors = model.encode_sentences(sentences, combine_strategy=0)
+  return word_vectors
 
 def smiles2txt(dataset):  
     ''' reading the smiles from the csv file and saves them in txt file in order to get the 
@@ -65,49 +70,43 @@ class Pairs(Dataset):
         return len(self.data)
         return self.decoder(self.encoder(x))
 
+class PairsEncoder(BaseNet):
 
-class PairsEncoder(nn.Module):
-
-    def __init__(self,proba=0.1):
+    def __init__(self):
         super().__init__()
         self.rep_dim = 50
-        self.seq = nn.Sequential(SAB(dim_in=300, dim_out=150, num_heads=5),
-                                 nn.Dropout(p=proba),
-            SAB(dim_in=150, dim_out=50, num_heads=5),
-        PMA(dim=50, num_heads=2, num_seeds=1))
-
+        self.seq = nn.Sequential(SAB(dim_in=768, dim_out=150, num_heads=5),
+              SAB(dim_in=150, dim_out=50, num_heads=5),
+            PMA(dim=50, num_heads=2, num_seeds=1))
+        
     def forward(self, inp):
-      x = torch.split(inp, 300, dim=1)     
+      x = torch.split(inp, 768, dim=1)     
       x= torch.stack(x).transpose(0,1)
       x = self.seq(x).squeeze()
       return x.view(inp.size(0), -1)
 
+class PairsAutoEncoder(BaseNet):
 
-class PairsAutoEncoder(nn.Module):
-    def __init__(self, proba=0.1):
+    def __init__(self):
         super().__init__()
-        self.encoder = PairsEncoder(proba)
+        self.encoder = PairsEncoder()
         self.encoder.apply(init_weights)
-        self.decoder = nn.Sequential( nn.Linear(in_features=50, out_features=300), nn.LeakyReLU(),
-                                     #nn.Dropout(p=proba),
-        nn.Linear(in_features=300, out_features=600))
+        self.decoder = nn.Sequential( nn.Linear(in_features=50, out_features=768), nn.LeakyReLU(),
+                          #           nn.Linear(in_features=150, out_features=300), nn.LeakyReLU(),
+        nn.Linear(in_features=768, out_features=1536))
         self.decoder.apply(init_weights)
     def forward(self, x):
-        return self.decoder(self.encoder(x)).squeeze()
+        return self.decoder(self.encoder(x))
 
-
-def load_dataset(filename):
+def load_dataset(filename):    
     dataset=pd.read_csv(filename)
     dataset = dataset.iloc[:10,:]
     smiles1 =  dataset['smiles1']
     smiles2 =  dataset['smiles2']
-    validation_set= get_representation(smiles1, smiles2)    
-    smiles2txt(validation_set)
-    python = sys.executable
-    subprocess.call(f"{python} src/gnn/main.py -fi src/gnn/smiles1.txt -m gin_supervised_masking -o src/gnn/results1", shell=True)
-    subprocess.call(f"{python} src/gnn/main.py -fi src/gnn/smiles2.txt -m gin_supervised_masking -o src/gnn/results2", shell=True)
-    valid1 = np.load('src/gnn/results1/mol_emb.npy')
-    valid2 = np.load('src/gnn/results2/mol_emb.npy')
-    df_gnn = pd.concat([pd.DataFrame(valid1), pd.DataFrame(valid2)],axis=1)   
-    dataset = Pairs_Dataset('', data= df_gnn.iloc[:, :] )
+    train_smiles1 = smiles1.values
+    train_smiles1_vectors = mean_pool(model, train_smiles1)
+    train_smiles2 = smiles2.values
+    train_smiles2_vectors = mean_pool(model, train_smiles2)
+    df_chemberta = pd.concat([pd.DataFrame(train_smiles1_vectors),pd.DataFrame(train_smiles2_vectors)], axis=1)
+    dataset = Pairs_Dataset('', data= df_chemberta.iloc[:, :] )
     return dataset

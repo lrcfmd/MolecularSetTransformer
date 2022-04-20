@@ -11,10 +11,10 @@ from collections import Counter
 from itertools import groupby
 import argparse
 import time
-#import morgan
+from src import morgan
 from src import gnn
-#import mordred
-#import chemberta
+from src import mordred
+from src import chemberta
 import random
 import torch 
 from rdkit import Chem
@@ -26,25 +26,30 @@ from src.deepSVDD import *
 from src.utils.config import Config
 from src.utils import *
 
-def get_dataset(dataset_format, file_name):
-    if dataset_format == 'gnn':
+def get_dataset(model, file_name):
+    if model == 'gnn':
         return gnn.load_dataset(file_name)
-    #elif dataset_format == 'chemberta':
-    #    return chemberta.load_dataset(file_name)
-    #return mordred.load_dataset(file_name)
+    elif model == 'chemberta':
+        return chemberta.load_dataset(file_name)
+    elif model == 'morgan':
+        return morgan.load_dataset(file_name)
+    return mordred.load_dataset(file_name)
 
 def set_neural_network(model_name):
     if model_name == 'gnn':
         PairsAutoEncoder, PairsEncoder = gnn.PairsAutoEncoder, gnn.PairsEncoder
-    #elif model_name == 'mordred':
-    #    ...
-    
+    elif model_name == 'chemberta':
+        PairsAutoEncoder, PairsEncoder = chemberta.PairsAutoEncoder, chemberta.PairsEncoder
+    elif model_name == 'morgan':
+        PairsAutoEncoder, PairsEncoder = morgan.PairsAutoEncoder, chemberta.PairsEncoder
+    elif model_name == 'mordred':
+        PairsAutoEncoder, PairsEncoder = mordred.PairsAutoEncoder, mordred.PairsEncoder
+
     def build_autoencoder(net_name):
         return PairsAutoEncoder()
 
     def build_network(net_name):  
         return PairsEncoder()
-
     deepSVDD.build_network = build_network
     deepSVDD.build_autoencoder = build_autoencoder
 
@@ -57,9 +62,9 @@ def set_seed():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model', default= 'morgan', choices = ['gnn', 'morgan', 'chemberta', 'mordred'] , help='The model to use for training')
-    parser.add_argument('--training_data')#, default= 'morgan', action='store_true', help='Use the Morgan fingerprint')
-    parser.add_argument('--save_dir')#, default= 'morgan', action='store_true', help='Use the Morgan fingerprint')
-    parser.add_argument('-n_epochs', default= 50, type =  int, help='Set the number of epochs')
+    parser.add_argument('--training_data', help='The csv file with the training smiles pairs')
+    parser.add_argument('--save_dir', help='The directory to save the trained network')
+    parser.add_argument('-n_epochs', default= 50, type = int, help='Set the number of epochs')
     parser.add_argument('-lr', default= 0.001, type = float, help='Set the learning rate')
     args = parser.parse_args()
 
@@ -77,7 +82,8 @@ def main():
                    weight_decay= 0.00001,
                    device= 'cpu',
                    n_jobs_dataloader=0)
-    deep_SVDD.save_model(args.save_dir)
+    
+    deep_SVDD.save_model(f'{args.save_dir}/model.pth')
 
 if __name__ == "__main__":
     main()

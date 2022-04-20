@@ -1,6 +1,6 @@
-from deep_one_class.src.base.base_trainer import BaseTrainer
-from deep_one_class.src.base.base_dataset import BaseADDataset
-from deep_one_class.src.base.base_net import BaseNet
+from src.base.base_trainer import BaseTrainer
+from src.base.base_dataset import BaseADDataset
+from src.base.base_net import BaseNet
 from sklearn.metrics import roc_auc_score
 
 import logging
@@ -63,7 +63,7 @@ class AETrainer(BaseTrainer):
                 # Update network parameters via backpropagation: forward + backward + optimize
                 outputs = ae_net(inputs)
                 #scores = torch.sum((outputs - inputs) ** 2, dim=tuple(range(1, outputs.dim())))
-                scores =nakius_score(inputs, outputs)
+                scores = bidirectional_score(inputs, outputs)
                 loss = torch.mean(scores)
                 loss.backward()
                 optimizer.step()
@@ -115,16 +115,16 @@ class AETrainer(BaseTrainer):
                 loss_epoch += loss.item()
                 n_batches += 1
 
-        logger.info('Test set Loss: {:.8f}'.format(loss_epoch / n_batches))
+        #logger.info('Test set Loss: {:.8f}'.format(loss_epoch / n_batches))
 
-        _, labels, scores = zip(*idx_label_score)
-        labels = np.array(labels)
-        scores = np.array(scores)
+        #_, labels, scores = zip(*idx_label_score)
+        #labels = np.array(labels)
+        #scores = np.array(scores)
 
-        auc = roc_auc_score(labels, scores)
-        logger.info('Test set AUC: {:.2f}%'.format(100. * auc))
+        #auc = roc_auc_score(labels, scores)
+        #logger.info('Test set AUC: {:.2f}%'.format(100. * auc))
 
-        test_time = time.time() - start_time
-        logger.info('Autoencoder testing time: %.3f' % test_time)
-        logger.info('Finished testing autoencoder.')
-        return auc
+        #test_time = time.time() - start_time
+        #logger.info('sting time: %.3f' % test_time)
+        #logger.info('Finished testing autoencoder.')
+        #return auc
