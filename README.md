@@ -31,24 +31,8 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
 |     12        |     Wu et al, Cryst. Growth Des., 2021, 21, 4531–4546                         |     63 (22 negatives + 41 positives)         |   COSMO-RS, MC                                   |
 |     13        |     J. Yuan et al, CrystEngComm, 2021, 23, 6039–6044                          |     16 (9 negatives + 7 positives)           |   COSMO-RS                                       |
 
-## Using pretrained models to rank any test data
 
-    python eval.py --model <model> --dataset_name <dataset_name> --save_dir <save_dir> --get_plots --threshold <threshold>
-
-- `model` The molecular embeddings to use. Choose among:
-    - gnn
-    - morgan
-    - chemberta
-    - mordred
-- `dataset_name` The location of the .csv file including the molecular pairs 
-- `save_dir` The folder to save the generated files 
-- `threshold` Only needed if plotting the results and have some known labels
-
-Example
-
-    python eval.py --model gnn --dataset_name meps --save_dir results_folder --get_plots --threshold 0.85
-
-## Or train your own models based on the prefered molecular representation
+## Train your own models based on the prefered molecular representation
 
     python train.py --model <model> --training_data <data> --save_dir <save_dir> -n_epochs <epochs> -lr <learning_rate>
 
@@ -61,9 +45,10 @@ Example
 - `n_epochs` The number of epochs to use for training    
 - `lr` Learning rate
 
-## Interpretability with Shapley
-A notebook that explains how you can use SHAP to analyse and interpret the predictions of our machine learning models is provided here: `notebooks/interpretability.ipynb` 
+Example
 
-## Alternatively use Streamlit to get quick predictions for any given SMILES pair 
+    python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir pretrained_models -n_epochs 100 -lr 0.001
+
+## Use our pretrained models to get quick predictions for any given SMILES pair 
 
 just click on the link: [https://share.streamlit.io/katerinavr/streamlit/app.py](https://share.streamlit.io/katerinavr/streamlit/app.py)
