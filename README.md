@@ -13,7 +13,7 @@ The training co-crystals dataset was created after removing the duplicate pairs,
     python extract_cocrystals/drop_duplicates.py
 
 ## Benchmarks (Publically available co-crystal screening data)
-All the is-silico co-crystal screening datasets gathered from literature can be found on the validation_data folder and are described below in chronological order:
+All the is-silico co-crystal screening datasets gathered from literature can be found on the validation_database folder and are described below in chronological order:
 
 |               |     Dataset reference                                                         |     Number or data                           |     computational methods tested on these   datasets    |
 |---------------|-------------------------------------------------------------------------------|----------------------------------------------|-------------------------------------------------|
