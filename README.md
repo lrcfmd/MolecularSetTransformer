@@ -12,7 +12,7 @@ The training co-crystals dataset was created after removing the duplicate pairs,
 
     python extract_cocrystals/drop_duplicates.py
 
-The code for generating the co-crystals tree map can be found in the ```TMAP-cocrystals``` folder. The PPD code for calculating the distances between the co-crystals can be foung in https://github.com/dwiddo/average-minimum-distance
+The code for generating the co-crystals tree map can be found in the ```TMAP-cocrystals``` folder. The PPD code for calculating the distances between the co-crystals can be found in https://github.com/dwiddo/average-minimum-distance
 
 # Benchmarks (Publically available co-crystal screening data)
 All the is-silico co-crystal screening datasets gathered from literature can be found on the validation_database folder and are described below in chronological order:
