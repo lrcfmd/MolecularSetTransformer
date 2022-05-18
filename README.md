@@ -1,8 +1,8 @@
-## Molecular Set Transformer
-A deep learning model, namely Molecular Set Transformer, was designed for enabling high-throughput co-crystal screening for any type of molecular pairs. The model is able to provide score and uncertainty for any given molecular pair based on its probability to form a multicomponent cystal.
+# Molecular Set Transformer
+A deep learning model, namely Molecular Set Transformer, was designed for enabling high-throughput co-crystal screening for any type of molecular pairs. The model is able to provide score and uncertainty for any given molecular pair based on its probability to form a multicomponent crystal.
 <img src="https://github.com/katerinavr/cocrystals/blob/master/figures/TOC.png" width="800" height="400">
 
-## Extract co-crystals from the Cambridge Structural Database (CSD)
+# Extract co-crystals from the Cambridge Structural Database (CSD)
 You need the CSD licence (https://www.ccdc.cam.ac.uk/) to use this script. You can extract multicomponent crystals after screening the whole > 1 million CSD database. If you do not want to include the solvents , you can use the option  `--no_solvents`
 
     python extract_cocrystals/extract_cocrystals.py --no_solvents
@@ -12,7 +12,9 @@ The training co-crystals dataset was created after removing the duplicate pairs,
 
     python extract_cocrystals/drop_duplicates.py
 
-## Benchmarks (Publically available co-crystal screening data)
+The code for generating the co-crystals tree map can be found in the ```TMAP-cocrystals``` folder. The PPD code for calculating the distances between the co-crystals can be foung in https://github.com/dwiddo/average-minimum-distance
+
+# Benchmarks (Publically available co-crystal screening data)
 All the is-silico co-crystal screening datasets gathered from literature can be found on the validation_database folder and are described below in chronological order:
 
 |               |     Dataset reference                                                         |     Number or data                           |     computational methods tested on these   datasets    |
@@ -32,7 +34,7 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
 |     13        |     J. Yuan et al, CrystEngComm, 2021, 23, 6039–6044                          |     16 (9 negatives + 7 positives)           |   COSMO-RS                                       |
 
 
-## Train your own models based on the prefered molecular representation
+# Train your own models based on the prefered molecular representation
 
     python train.py --model <model> --training_data <data> --save_dir <save_dir> -n_epochs <epochs> -lr <learning_rate>
 
@@ -42,13 +44,27 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
     - chemberta
     - mordred
 - `training_data` The location of the .csv file containing the molecular pairs for training
+- `save_dir` The directory to save the trained model 
 - `n_epochs` The number of epochs to use for training    
 - `lr` Learning rate
+- `use wandb` We use Weight&Biases to monitor the hyperparameters during the training. This not a strict requirement but it is suggested. If you want to use it, you need to set up a `config.json` file with the hyperparameters and to create an account [here](https://wandb.ai/) and install the Python package:
+
+    ```  
+    pip install wandb
+    ```
 
 Example
 
     python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir pretrained_models -n_epochs 100 -lr 0.001
 
-## Use our pretrained models to get quick predictions for any given SMILES pair 
+# Notebooks
+- ```cocrystal_statistics.ipynb``` Contains the code to reproduce the plots regarding the statistical analysis of the current co-crystal related research
+- ```models_evaluation.ipynb``` Contains the code to reproduce the scoring plots of the paper. Additionally reproduces the AUC plots for head to head comparison of the APIs accuracy
+- ```interpretability.ipynb``` Notebook explaining the interpretability among the molecular pairs
 
-just click on the link: [https://share.streamlit.io/katerinavr/streamlit/app.py](https://share.streamlit.io/katerinavr/streamlit/app.py)
+
+# Use our pretrained models to get quick predictions for any given SMILES pair 
+
+Click on the link: [Co-crystal screeening GUI](https://share.streamlit.io/katerinavr/streamlit/app.py)
+
+The full code and dependencies can be found to the following repository: https://github.com/katerinavr/streamlit
