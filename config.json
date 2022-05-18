@@ -1,0 +1,29 @@
+
+{
+    "method": "bayes", 
+    "metric": {
+      "name": "accuracy",
+      "goal": "maximize"   
+    },
+    "parameters": {
+        "n_epochs": {
+        "values": [100, 150, 200, 250] 
+        },
+    "batch_size": {
+        "values": [32, 64, 128, 256]
+        },
+    "dropout": {
+        "values": [0.1]
+        },
+    "weight_decay": {
+        "values": [1e-5, 1e-6]
+        },
+    "lr": {
+        "values": [1e-3, 1e-4]
+        },
+    "optimizer_name": {
+        "values": ["adam"]
+        }
+
+        }
+    }

@@ -97,7 +97,7 @@ class PairsAutoEncoder(nn.Module):
 
 
 def load_dataset(filename):
-    dataset=pd.read_csv(filename)
+    dataset=pd.read_csv(filename, encoding='latin1')
     dataset = dataset.iloc[:10,:]
     smiles1 =  dataset['smiles1']
     smiles2 =  dataset['smiles2']

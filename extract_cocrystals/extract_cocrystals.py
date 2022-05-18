@@ -85,14 +85,14 @@ def search_cocrystals(filter_solvents=True):
     dataset_cocrystals = dataset_cocrystals[~dataset_cocrystals.name.str.contains("clathrate")] 
      
     print(end_time-start_time)
-    dataset_cocrystals.to_csv('datasets/train_data/all_cocrystals.csv',index=False)
+    dataset_cocrystals.to_csv('new_all_cocrystals.csv',index=False)
     return cocrystals
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-s', '--no_solvent', default=True, action='store_true', help='Remove solvents or not')
     args = parser.parse_args()
-    cocrystals = search_cocrystals(args.solvent)
+    cocrystals = search_cocrystals()
 
 if __name__ == "__main__":
     main()

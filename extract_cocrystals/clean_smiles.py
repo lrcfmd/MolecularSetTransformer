@@ -112,7 +112,6 @@ N#N
 C#C
 CC#CC
 I[As](I)I
-NCCN
 IC#CI
 CBr
 BrI
