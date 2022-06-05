@@ -94,7 +94,7 @@ def main():
 
     set_seed()
     deep_SVDD = deepSVDD.DeepSVDD('one-class', 0.05)
-    deep_SVDD.set_network('Molecular Set Transformer')
+    #deep_SVDD.set_network('Molecular Set Transformer')
     dataset = get_dataset(args.model, args.training_data)
     set_neural_network(args.model)
 

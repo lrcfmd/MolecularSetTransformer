@@ -1,0 +1,25 @@
+API,MEPS*,Wang**,COSMO-RS***
+Piracetam ,0.93,0.895,-
+Paracetamol,0.7676,0.543,0.6
+Diclofenac,0.75,0.857,-
+Pyrazinamide,0.841,0.876,-
+Acetazolamide,0.794,0.311,-
+Indomethacin,0.68,0.658,0.54
+Drug_candidate,0.792,0.986,-
+Furosemide,0.65,0.894,-
+Nalidixicacid,1,0.948,-
+3Cyanophenol,0.76,0.911,0.98
+4Cyanophenol,0.89,0.964,1
+3Cyanopyridine,0.94,1,-
+4Cyanopyridine,0.95,0.911,0.96
+Benzamide,0.4,0.738,0.71
+Itraconazole,0.8125,0.844,1
+Bicalutamide,0.68,0.688,0.94
+Meloxicam,0.633,0.733,0.67
+Nicotinamide,1,1,0.92
+Ibuprofen,-,-,0.44****
+,,,
+*Reported in the paper: https://pubs.acs.org/doi/abs/10.1021/cg401339v,,,
+**Reported in the paper: https://pubs.acs.org/doi/10.1021/acs.cgd.0c00767,,,
+***Reported in the paper: https://europepmc.org/article/med/32969658,,,
+****Reported in the paper: https://doi.org/10.1039/D1CE00587A,,,

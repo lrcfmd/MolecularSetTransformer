@@ -101,7 +101,7 @@ class PairsAutoEncoder(BaseNet):
 
 
 def load_dataset(filename):
-    dataset=pd.read_csv(filename)
+    dataset=pd.read_csv(filename, encoding='latin1')
     dataset = dataset.iloc[:10,:]
     df_morgan = get_representation(dataset)
     dataset = Pairs_Dataset('', data= df_morgan.iloc[:, :] )
