@@ -62,6 +62,9 @@ Example
 - ```models_evaluation.ipynb``` Contains the code to reproduce the scoring plots of the paper. Additionally reproduces the AUC plots for head to head comparison of the APIs accuracy
 - ```interpretability.ipynb``` Notebook explaining the interpretability among the molecular pairs
 
+# Comparing with other co-crystal screening methods 
+- ```ccgnet_reports``` Contains the outcome from the tests using the CCGnet model(github repo)
+-MEPS and COSMO-RS data 
 
 # Use our pretrained models to get quick predictions for any given SMILES pair 
 
