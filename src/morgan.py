@@ -7,14 +7,15 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, Subset
 import torch.nn.functional as F
-from src import deepSVDD
-from src.deepSVDD import *
+from src import one_class_model
+from src.one_class_model import *
 from src.utils.config import Config
-from src.base.torchvision_dataset import TorchvisionDataset
+from src.base.torchvision_dataset import BaseDataset
 from src.utils.config import Config
 from src.base.base_net import BaseNet
 from rdkit import Chem
 from rdkit.Chem import AllChem
+from src.set_transformer.modules import *
 
 def get_representation(dataset):
     """ Given the smiles of a validation dataset convert it to fingerprint
@@ -39,7 +40,7 @@ def fingerprint_from_df(smiles, prefix):
   df.columns = columns
   return df
 
-class Pairs_Dataset(TorchvisionDataset):
+class Pairs_Dataset(BaseDataset):
 
     def __init__(self, root: str, train_idx=None, test_idx=None, data=None):
         super().__init__(root)

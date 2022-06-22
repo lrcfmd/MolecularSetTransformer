@@ -1,17 +1,14 @@
+# Code inspired from https://github.com/lukasruff/Deep-SVDD-PyTorch
 import json
 import torch
 import torch.nn as nn
-from src.base.base_dataset import BaseADDataset
+#from src.base.base_dataset import BaseADDataset
 from src.optim.ae_trainer import AETrainer
-from src.base.base_net import BaseNet
+#from src.base.base_net import BaseNet
 
-class DeepSVDD(object):
-    """A class for the Deep SVDD method.
-
+class one_class(object):
+    """
     Attributes:
-        objective: A string specifying the objective.
-        net_name: A string indicating the name of the neural network to use.
-        net: The neural network \phi.
         ae_net: The autoencoder network corresponding to \phi for network weights pretraining.
         optimizer_name: A string indicating the optimizer to use for training the Deep SVDD network.
         ae_trainer: AETrainer to train an autoencoder in pretraining.
@@ -19,18 +16,11 @@ class DeepSVDD(object):
         results: A dictionary to save the results.
     """
 
-    def __init__(self, objective: str = 'one-class', nu: float = 0.1):
-        """Inits DeepSVDD with one of the two objectives and hyperparameter nu."""
+    def __init__(self):
+        """Inits the autoencoder network for training"""
 
-        assert objective in ('one-class', 'soft-boundary'), "Objective must be either 'one-class' or 'soft-boundary'."
-        self.objective = objective
-        assert (0 < nu) & (nu <= 1), "For hyperparameter nu, it must hold: 0 < nu <= 1."
-
-        self.net_name = None
-        self.net = None  # neural network
         self.optimizer_name = None
-
-        self.ae_net = None  # autoencoder network for pretraining
+        self.ae_net = None
         self.ae_trainer = None
         self.ae_optimizer_name = None
 
@@ -42,11 +32,11 @@ class DeepSVDD(object):
         }
 
 
-    def pretrain(self, dataset: BaseADDataset, optimizer_name: str = 'adam', lr: float = 0.001, n_epochs: int = 100,
+    def ae_train(self, ae_net, dataset, optimizer_name: str = 'adam', lr: float = 0.001, n_epochs: int = 100,
                  lr_milestones: tuple = (), batch_size: int = 128, weight_decay: float = 1e-6, device: str = 'cuda',
                  n_jobs_dataloader: int = 0):
         
-        self.ae_net = build_autoencoder(self.net_name)
+        self.ae_net = ae_net
         self.ae_optimizer_name = optimizer_name
         self.ae_trainer = AETrainer(optimizer_name, lr=lr, n_epochs=n_epochs, lr_milestones=lr_milestones,
                                     batch_size=batch_size, weight_decay=weight_decay, device=device,
@@ -81,3 +71,4 @@ def init_weights(m):
     if type(m) == nn.Linear:
         torch.nn.init.xavier_uniform_(m.weight)
         m.bias.data.fill_(0.01)
+

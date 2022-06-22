@@ -1,0 +1,9 @@
+name: digital_discovery
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pytorch==1.10.2
+  - cpuonly
+prefix: C:\Users\kvriz\.conda\envs\digital_discovery

@@ -1,30 +1,27 @@
 #python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir src -n_epochs 1 -lr 0
-from random import choices
+
 import sys
 import json
 import tempfile
 import numpy as np
 import pandas as pd
 import os.path
-import csv
 from collections import Counter
 from itertools import groupby
 import argparse
-import time
-from src import morgan
-from src import gnn
-from src import mordred
-from src import chemberta
 import random
 import torch 
 from rdkit import Chem
 from rdkit.Chem import AllChem
-import glob
 from src.optim.ae_trainer import bidirectional_score
-from src import deepSVDD
-from src.deepSVDD import *
+from src import one_class_model
+from src.one_class_model import *
 from src.utils.config import Config
 from src.utils import *
+from src import morgan
+from src import gnn
+from src import mordred
+from src import chemberta
 
 def get_dataset(model, file_name):
     if model == 'gnn':
@@ -45,13 +42,15 @@ def set_neural_network(model_name):
     elif model_name == 'mordred':
         PairsAutoEncoder, PairsEncoder = mordred.PairsAutoEncoder, mordred.PairsEncoder
 
+    return PairsAutoEncoder()
+
     def build_autoencoder(net_name):
         return PairsAutoEncoder()
 
     def build_network(net_name):  
         return PairsEncoder()
-    deepSVDD.build_network = build_network
-    deepSVDD.build_autoencoder = build_autoencoder
+    one_class_model.build_network = build_network
+    one_class_model.build_autoencoder = build_autoencoder
 
 def set_seed():
   seed = 0
@@ -70,7 +69,7 @@ def wandb_sweep(dataset, config):
     }
     wandb.init(config=config_defaults)
     config = wandb.config
-    deep_SVDD.pretrain(dataset,
+    deep_one_class.ae_train(dataset,
                    optimizer_name='adam',
                    lr=config.lr,
                    n_epochs = config.n_epochs , #250, 1e-4,32,1e-04
@@ -93,10 +92,9 @@ def main():
     args = parser.parse_args()
 
     set_seed()
-    deep_SVDD = deepSVDD.DeepSVDD('one-class', 0.05)
-    #deep_SVDD.set_network('Molecular Set Transformer')
+    deep_one_class = one_class_model.one_class()#'one-class', 0.05)
     dataset = get_dataset(args.model, args.training_data)
-    set_neural_network(args.model)
+    ae = set_neural_network(args.model)
 
     if args.use_wandb:
         import wandb
@@ -111,7 +109,7 @@ def main():
         config = wandb.config
 
 
-    deep_SVDD.pretrain(dataset,
+    deep_one_class.ae_train(ae, dataset,
                     optimizer_name='adam',
                     lr= args.lr,
                     n_epochs = args.n_epochs, 
@@ -121,10 +119,7 @@ def main():
                     device= 'cpu',
                     n_jobs_dataloader=0)
     
-
-
-
-    deep_SVDD.save_model(f'{args.save_dir}/model.pth')
+    deep_one_class.save_model(f'{args.save_dir}/model.pth')
 
 if __name__ == "__main__":
     main()

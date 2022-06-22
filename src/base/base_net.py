@@ -1,3 +1,4 @@
+# Code from https://github.com/lukasruff/Deep-SVDD-PyTorch
 import logging
 import torch.nn as nn
 import numpy as np

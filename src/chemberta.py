@@ -7,14 +7,15 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, Subset
 import torch.nn.functional as F
-from src import deepSVDD
-from src.deepSVDD import *
+from . import one_class_model
+from src.one_class_model import *
 from src.utils.config import Config
-from src.base.torchvision_dataset import TorchvisionDataset
+from src.base.torchvision_dataset import BaseDataset
 from src.utils.config import Config
 from src.base.base_net import BaseNet
 from simpletransformers.language_representation import RepresentationModel
 from simpletransformers.config.model_args import ModelArgs
+from src.set_transformer.modules import *
 
 model_args = ModelArgs(max_seq_length=156)
 model = RepresentationModel(
@@ -39,7 +40,7 @@ def smiles2txt(dataset):
         for item in dataset['smiles2'].values:
             f.write("%s\n" % item)
 
-class Pairs_Dataset(TorchvisionDataset):
+class Pairs_Dataset(BaseDataset):
 
     def __init__(self, root: str, train_idx=None, test_idx=None, data=None):
         super().__init__(root)
@@ -99,7 +100,7 @@ class PairsAutoEncoder(BaseNet):
         return self.decoder(self.encoder(x))
 
 def load_dataset(filename):    
-    dataset=pd.read_csv(filename)
+    dataset=pd.read_csv(filename, encoding='latin1')
     dataset = dataset.iloc[:10,:]
     smiles1 =  dataset['smiles1']
     smiles2 =  dataset['smiles2']

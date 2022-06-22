@@ -7,10 +7,10 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, Subset
 import torch.nn.functional as F
-from src import deepSVDD
-from src.deepSVDD import *
+from . import one_class_model
+from src.one_class_model import *
 from src.utils.config import Config
-from src.base.torchvision_dataset import TorchvisionDataset
+from src.base.torchvision_dataset import BaseDataset
 from src.utils.config import Config
 from src.base.base_net import BaseNet
 import subprocess
@@ -20,6 +20,7 @@ import argparse
 import glob
 from mordred import Calculator, descriptors  #https://github.com/mordred-descriptor/mordred
 calc = Calculator(descriptors, ignore_3D=True)
+from src.set_transformer.modules import *
 
 
 def smile_to_modred(smile):
@@ -42,7 +43,7 @@ def get_mordred_representation(dataset):
      get_modred_df(dataset['Smiles2'].values)], axis=1)
     return df
 
-class Pairs_Dataset(TorchvisionDataset):
+class Pairs_Dataset(BaseDataset):
 
     def __init__(self, root: str, train_idx=None, test_idx=None, data=None):
         super().__init__(root)
@@ -104,7 +105,7 @@ class PairsAutoEncoder(BaseNet):
         return self.decoder(self.encoder(x))
 
 def load_dataset(filename):
-    dataset=pd.read_csv(filename)
+    dataset=pd.read_csv(filename, encoding='latin1')
     dataset = dataset.iloc[:10,:]
     smiles1 =  dataset['smiles1']
     smiles2 =  dataset['smiles2']
@@ -112,3 +113,4 @@ def load_dataset(filename):
      pd.DataFrame(get_modred_df(dataset.smiles2).apply(lambda x: pd.to_numeric(x, errors='coerce').fillna(0)), columns=[str(d) for d in calc.descriptors])],axis=1)
     dataset = Pairs_Dataset('', data= df_mordred.iloc[:, :] )
     return dataset
+

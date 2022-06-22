@@ -1,3 +1,4 @@
+# Code from https://github.com/lukasruff/Deep-SVDD-PyTorch
 from abc import ABC, abstractmethod
 from torch.utils.data import DataLoader
 

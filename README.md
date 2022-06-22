@@ -2,6 +2,20 @@
 A deep learning model, namely Molecular Set Transformer, was designed for enabling high-throughput co-crystal screening for any type of molecular pairs. The model is able to provide score and uncertainty for any given molecular pair based on its probability to form a multicomponent crystal.
 <img src="https://github.com/katerinavr/cocrystals/blob/master/figures/TOC.png" width="800" height="400">
 
+# Installation
+We recommend installing the package by following the instructions below.
+```
+conda create --name cocrystals python=3.8.8
+conda activate cocrystals
+git clone https://github.com/lrcfmd/MolecularSetTransformer.git
+cd MolecularSetTransformer
+pip install -r requirements.txt
+```
+either cloning the environment from the cocrystals.yaml file
+```
+conda create --name myclone --clone cocrystalsy
+```
+
 # Extract co-crystals from the Cambridge Structural Database (CSD)
 You need the CSD licence (https://www.ccdc.cam.ac.uk/) to use this script. You can extract multicomponent crystals after screening the whole > 1 million CSD database. If you do not want to include the solvents , you can use the option  `--no_solvents`
 
