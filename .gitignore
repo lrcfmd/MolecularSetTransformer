@@ -6,8 +6,12 @@ data/*
 extract_cocrystals/*
 deep_one_class/*
 src/old/*
+src/gnn/*
+src/gnn/*/*
 .gitignore
 notebooks_old/*
+*.pyc
+*.pth
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode

@@ -2,8 +2,8 @@
 {
     "method": "bayes", 
     "metric": {
-      "name": "accuracy",
-      "goal": "maximize"   
+      "name": "loss",
+      "goal": "minimize"   
     },
     "parameters": {
         "n_epochs": {

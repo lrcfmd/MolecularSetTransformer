@@ -58,7 +58,7 @@ def set_seed():
   np.random.seed(seed)
   torch.manual_seed(seed)
 
-def wandb_sweep(dataset, config):
+def wandb_sweep(ae, dataset, config, deep_one_class):
     import wandb
     config_defaults = {
         'n_epochs': 150,
@@ -69,17 +69,16 @@ def wandb_sweep(dataset, config):
     }
     wandb.init(config=config_defaults)
     config = wandb.config
-    deep_one_class.ae_train(dataset,
+    deep_one_class.ae_train(ae, dataset,
                    optimizer_name='adam',
                    lr=config.lr,
-                   n_epochs = config.n_epochs , #250, 1e-4,32,1e-04
+                   n_epochs = config.n_epochs ,
                    lr_milestones=(100,),
                    batch_size= config.batch_size , 
-                   weight_decay= config.weight_decay ,#cfg.settings['ae_weight_decay'],  
-                   device=device,
+                   weight_decay= config.weight_decay ,# 
                    n_jobs_dataloader=0, use_wandb=True)
-    wandb.log({"auc": deep_SVDD.ae_trainer.test(dataset, deep_SVDD.ae_net)}) 
-    wandb.agent(sweep_id, train)
+    wandb.log({"auc": deep_one_class.ae_trainer.test(ae, dataset, deep_one_class.ae_net)}) 
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -98,6 +97,9 @@ def main():
 
     if args.use_wandb:
         import wandb
+        from wandb.keras import WandbCallback
+        with open("sweep_config.json") as f:
+            sweep_config = json.load(f)
         config_defaults = {
         'n_epochs': 50,
         'batch_size': 32,
@@ -105,10 +107,9 @@ def main():
         'lr': 1e-4,
         'optimizer_name': 'adam',
         }
-        wandb.init(config=config_defaults)
-        config = wandb.config
-
-
+        sweep_id = wandb.sweep(sweep_config)
+        wandb.agent(sweep_id, wandb_sweep(ae, dataset, sweep_config, deep_one_class))
+        
     deep_one_class.ae_train(ae, dataset,
                     optimizer_name='adam',
                     lr= args.lr,

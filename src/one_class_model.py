@@ -2,9 +2,7 @@
 import json
 import torch
 import torch.nn as nn
-#from src.base.base_dataset import BaseADDataset
 from src.optim.ae_trainer import AETrainer
-#from src.base.base_net import BaseNet
 
 class one_class(object):
     """
@@ -34,21 +32,20 @@ class one_class(object):
 
     def ae_train(self, ae_net, dataset, optimizer_name: str = 'adam', lr: float = 0.001, n_epochs: int = 100,
                  lr_milestones: tuple = (), batch_size: int = 128, weight_decay: float = 1e-6, device: str = 'cuda',
-                 n_jobs_dataloader: int = 0):
+                 n_jobs_dataloader: int = 0, use_wandb=False, la_steps=0, la_alpha=0):
         
         self.ae_net = ae_net
         self.ae_optimizer_name = optimizer_name
         self.ae_trainer = AETrainer(optimizer_name, lr=lr, n_epochs=n_epochs, lr_milestones=lr_milestones,
                                     batch_size=batch_size, weight_decay=weight_decay, device=device,
                                     n_jobs_dataloader=n_jobs_dataloader)
-        self.ae_net = self.ae_trainer.train(dataset, self.ae_net)
+        self.ae_net = self.ae_trainer.train(dataset, self.ae_net,use_wandb)
         self.ae_trainer.test(dataset, self.ae_net)
 
 
     def save_model(self, export_model, save_ae=True):
         """Save the model to export_model."""
-
-        #net_dict = self.net.state_dict()
+        
         ae_net_dict = self.ae_net.state_dict() if save_ae else None
 
         torch.save({'ae_net_dict': ae_net_dict}, export_model)
