@@ -112,7 +112,7 @@ def main():
                     device= 'cpu',
                     n_jobs_dataloader=0, use_wandb=args.use_wandb)
     
-    deep_one_class.save_model(os.path.join(args.save_dir, args.model_name))
+    deep_one_class.save_model(os.path.join(args.save_dir, f'{args.model_name}.pth'))
 
 if __name__ == "__main__":
     main()

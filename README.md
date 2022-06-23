@@ -72,6 +72,14 @@ Example
 
     python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir pretrained_models --model_name gnn_trained -n_epochs 10 -lr 0.001 --use_wandb
 
+# Load a model after training
+
+```
+from load_pretrained_models import *
+gnn_model = load_model('gnn', 'pretrained_models/model.pth')
+```
+
+
 # Notebooks
 - ```cocrystal_statistics.ipynb``` Contains the code to reproduce the plots regarding the statistical analysis of the current co-crystal related research
 - ```GNN_train_evaluate_example.ipynb``` Contains the code to train/evaluate and reproduce the plots of the paper for the GNN model.
