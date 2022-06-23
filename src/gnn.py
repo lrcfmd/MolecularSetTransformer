@@ -27,11 +27,11 @@ def smiles2txt(dataset):
     ''' reading the smiles from the csv file and saves them in txt file in order to get the 
     graph embendings from each smile'''
 
-    with open(os.path.join("src\\gnn",'smiles1.txt'), 'w') as f:
+    with open(os.path.join("src", "gnn",'smiles1.txt'), 'w') as f:
         for item in dataset['smiles1'].values:
             f.write("%s\n" % item)
 
-    with open(os.path.join("src\\gnn", 'smiles2.txt'), 'w') as f:
+    with open(os.path.join("src" , "gnn", 'smiles2.txt'), 'w') as f:
         for item in dataset['smiles2'].values:
             f.write("%s\n" % item)
 
