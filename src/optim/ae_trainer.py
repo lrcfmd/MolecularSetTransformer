@@ -31,7 +31,7 @@ class AETrainer():
         self.device = device
         self.n_jobs_dataloader = n_jobs_dataloader
 
-    def train(self, dataset, ae_net):
+    def train(self, dataset, ae_net, use_wandb):
         logger = logging.getLogger()
 
         # Set device for network
@@ -80,7 +80,9 @@ class AETrainer():
             epoch_train_time = time.time() - epoch_start_time
             logger.info('  Epoch {}/{}\t Time: {:.3f}\t Loss: {:.8f}'
                         .format(epoch + 1, self.n_epochs, epoch_train_time, loss_epoch / n_batches))
-
+        if use_wandb:
+            import wandb
+            wandb.log({'loss': loss_epoch / n_batches})
         train_time = time.time() - start_time
         logger.info('Training time: %.3f' % train_time)
         logger.info('Finished pretraining.')
