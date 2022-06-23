@@ -62,7 +62,7 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
 - `save_dir` The directory to save the trained model 
 - `n_epochs` The number of epochs to use for training    
 - `lr` Learning rate
-- `use wandb` We use Weight&Biases to monitor the hyperparameters during the training. This not a strict requirement but it is suggested. If you want to use it, you need to set up a `config.json` file with the hyperparameters and to create an account [here](https://wandb.ai/) and install the Python package:
+- `use wandb` We use Weight&Biases to monitor the hyperparameters during the training. This not a strict requirement but it is suggested. If you want to use it, you need to use the 'use_wandb' flag and to create an account [here](https://wandb.ai/) and install the Python package:
 
     ```  
     pip install wandb
@@ -70,7 +70,7 @@ All the is-silico co-crystal screening datasets gathered from literature can be 
 
 Example
 
-    python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir pretrained_models -n_epochs 100 -lr 0.001
+    python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir pretrained_models --model_name gnn_trained -n_epochs 10 -lr 0.001 --use_wandb
 
 # Notebooks
 - ```cocrystal_statistics.ipynb``` Contains the code to reproduce the plots regarding the statistical analysis of the current co-crystal related research

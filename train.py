@@ -1,4 +1,4 @@
-#python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir src -n_epochs 1 -lr 0
+#python train.py --model gnn --training_data csd_data/csd_cocrystals2020.csv --save_dir pretrained_models --model_name gnn_model -n_epochs 1 -lr 0
 
 import sys
 import json
@@ -42,8 +42,6 @@ def set_neural_network(model_name):
     elif model_name == 'mordred':
         PairsAutoEncoder, PairsEncoder = mordred.PairsAutoEncoder, mordred.PairsEncoder
 
-    return PairsAutoEncoder()
-
     def build_autoencoder(net_name):
         return PairsAutoEncoder()
 
@@ -52,14 +50,19 @@ def set_neural_network(model_name):
     one_class_model.build_network = build_network
     one_class_model.build_autoencoder = build_autoencoder
 
+    return PairsAutoEncoder()
+
 def set_seed():
   seed = 0
   random.seed(seed)
   np.random.seed(seed)
   torch.manual_seed(seed)
 
-def wandb_sweep(ae, dataset, config, deep_one_class):
+def wandb_sweep():
     import wandb
+    deep_one_class = one_class_model.one_class()#'one-class', 0.05)
+    dataset = get_dataset(args.model, args.training_data)
+    ae = set_neural_network(args.model)
     config_defaults = {
         'n_epochs': 150,
         'batch_size': 32,
@@ -75,9 +78,8 @@ def wandb_sweep(ae, dataset, config, deep_one_class):
                    n_epochs = config.n_epochs ,
                    lr_milestones=(100,),
                    batch_size= config.batch_size , 
-                   weight_decay= config.weight_decay ,# 
+                   weight_decay= config.weight_decay , 
                    n_jobs_dataloader=0, use_wandb=True)
-    wandb.log({"auc": deep_one_class.ae_trainer.test(ae, dataset, deep_one_class.ae_net)}) 
 
 
 def main():
@@ -85,6 +87,7 @@ def main():
     parser.add_argument('--model', default= 'morgan', choices = ['gnn', 'morgan', 'chemberta', 'mordred'] , help='The model to use for training')
     parser.add_argument('--training_data', help='The csv file with the training smiles pairs')
     parser.add_argument('--save_dir', help='The directory to save the trained network')
+    parser.add_argument('--model_name', help='Name of the trained network')
     parser.add_argument('-n_epochs', default= 50, type = int, help='Set the number of epochs')
     parser.add_argument('-lr', default= 0.001, type = float, help='Set the learning rate')
     parser.add_argument('--use_wandb', action='store_true' ,help='Set the learning rate')
@@ -97,18 +100,7 @@ def main():
 
     if args.use_wandb:
         import wandb
-        from wandb.keras import WandbCallback
-        with open("sweep_config.json") as f:
-            sweep_config = json.load(f)
-        config_defaults = {
-        'n_epochs': 50,
-        'batch_size': 32,
-        'weight_decay': 1e-04,
-        'lr': 1e-4,
-        'optimizer_name': 'adam',
-        }
-        sweep_id = wandb.sweep(sweep_config)
-        wandb.agent(sweep_id, wandb_sweep(ae, dataset, sweep_config, deep_one_class))
+        wandb.init()
         
     deep_one_class.ae_train(ae, dataset,
                     optimizer_name='adam',
@@ -118,9 +110,9 @@ def main():
                     batch_size= 32, 
                     weight_decay= 0.00001,
                     device= 'cpu',
-                    n_jobs_dataloader=0)
+                    n_jobs_dataloader=0, use_wandb=args.use_wandb)
     
-    deep_one_class.save_model(f'{args.save_dir}/model.pth')
+    deep_one_class.save_model(os.path.join(args.save_dir, args.model_name))
 
 if __name__ == "__main__":
     main()

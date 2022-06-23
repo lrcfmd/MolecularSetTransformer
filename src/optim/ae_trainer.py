@@ -35,7 +35,8 @@ class AETrainer():
         logger = logging.getLogger()
 
         # Set device for network
-        ae_net = ae_net.to(self.device)
+        device = self.device if torch.cuda.is_available() else 'cpu'
+        ae_net = ae_net.to(device)
 
         # Get train data loader
         train_loader, _ = dataset.loaders(batch_size=self.batch_size, num_workers=self.n_jobs_dataloader)
@@ -61,7 +62,8 @@ class AETrainer():
             epoch_start_time = time.time()
             for data in train_loader:
                 inputs, _, _ = data
-                inputs = inputs.to(self.device)
+                device = self.device if torch.cuda.is_available() else 'cpu'
+                inputs = inputs.to(device)
 
                 # Zero the network parameter gradients
                 optimizer.zero_grad()
@@ -93,7 +95,8 @@ class AETrainer():
         logger = logging.getLogger()
 
         # Set device for network
-        ae_net = ae_net.to(self.device)
+        device = self.device if torch.cuda.is_available() else 'cpu'
+        ae_net = ae_net.to(device)
 
         # Get test data loader
         _, test_loader = dataset.loaders(batch_size=self.batch_size, num_workers=self.n_jobs_dataloader)
@@ -108,7 +111,8 @@ class AETrainer():
         with torch.no_grad():
             for data in test_loader:
                 inputs, labels, idx = data
-                inputs = inputs.to(self.device)
+                device = self.device if torch.cuda.is_available() else 'cpu'
+                inputs = inputs.to(device)
                 outputs = ae_net(inputs)
                 scores = bidirectional_score(inputs, outputs)
                 loss = torch.mean(scores)
@@ -120,4 +124,3 @@ class AETrainer():
 
                 loss_epoch += loss.item()
                 n_batches += 1
-
