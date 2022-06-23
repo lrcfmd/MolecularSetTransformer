@@ -11,9 +11,10 @@ git clone https://github.com/lrcfmd/MolecularSetTransformer.git
 cd MolecularSetTransformer
 pip install -r requirements.txt
 ```
-either cloning the environment from the cocrystals.yaml file
+
+Or cloning the environment from the cocrystals.yaml file
 ```
-conda create --name myclone --clone cocrystalsy
+conda create --name myclone --clone cocrystals.yml
 ```
 
 # Extract co-crystals from the Cambridge Structural Database (CSD)
