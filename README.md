@@ -5,7 +5,7 @@ A deep learning model, namely Molecular Set Transformer, was designed for enabli
 # Installation
 We recommend installing the package by following the instructions below.
 ```
-conda create --name cocrystals python=3.8.8
+conda create --name cocrystals python=3.7.13
 conda activate cocrystals
 git clone https://github.com/lrcfmd/MolecularSetTransformer.git
 cd MolecularSetTransformer
