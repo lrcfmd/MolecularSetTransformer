@@ -82,8 +82,6 @@ gnn_model = load_model('gnn', 'pretrained_models/model.pth')
 
 # Notebooks
 - ```cocrystal_statistics.ipynb``` Contains the code to reproduce the plots regarding the statistical analysis of the current co-crystal related research
-- ```GNN_train_evaluate_example.ipynb``` Contains the code to train/evaluate and reproduce the plots of the paper for the GNN model.
-
 
 # Comparing with other co-crystal screening methods 
 - ```ccgnet_reports``` Contains the outcome from the tests using the CCGnet model(github repo)
